@@ -1,4 +1,4 @@
-### Dijkstra Algorithm Demo
+## Dijkstra Algorithm Demo
 
-## To run
+### To run
     java -jar target/dijkstra.jar extras/vertices.list extras/edges.list
