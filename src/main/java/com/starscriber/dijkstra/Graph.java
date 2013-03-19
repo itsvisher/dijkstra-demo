@@ -3,8 +3,12 @@ package com.starscriber.dijkstra;
 import java.util.List;
 
 public class Graph {
-	private final List<Vertex> vertices;
-	private final List<Edge> edges;
+	private List<Vertex> vertices;
+	private List<Edge> edges;
+
+	public Graph() {
+		super();
+	}
 
 	public Graph(List<Vertex> vertices, List<Edge> edges) {
 		this.vertices = vertices;
@@ -15,8 +19,15 @@ public class Graph {
 		return vertices;
 	}
 
+	public void setVertices(List<Vertex> vertices) {
+		this.vertices = vertices;
+	}
+
 	public List<Edge> getEdges() {
 		return edges;
 	}
 
+	public void setEdges(List<Edge> edges) {
+		this.edges = edges;
+	}
 }//end of class

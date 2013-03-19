@@ -1,33 +1,39 @@
 package com.starscriber.dijkstra;
 
-import java.util.Set;
+import java.util.List;
 
-/**
- * Vertex of a Graph.
- *
- * @author Vishal | Paradigm Creatives
- */
 public class Vertex {
-	private final String id;
+	private int name;
+	private int distance;
 	private int diameter;
+	private Vertex previous;
 	private float centrality;
-	private Set<Vertex> adjacentNodes;
+	private List<Vertex> adjacencyList;
 
-	public Vertex(String id) {
-		this.id = id;
-	}
-
-	public Vertex(String id, int diameter, float centrality,
-			Set<Vertex> adjacenttNodes) {
+	public Vertex() {
 		super();
-		this.id = id;
-		this.diameter = diameter;
-		this.centrality = centrality;
-		this.adjacentNodes = adjacenttNodes;
+		distance = Integer.MAX_VALUE;
 	}
 
-	public String getId() {
-		return id;
+	public Vertex(int name) {
+		this.name = name;
+		distance = Integer.MAX_VALUE;
+	}
+
+	public int getName() {
+		return name;
+	}
+
+	public void setName(int name) {
+		this.name = name;
+	}
+
+	public int getDistance() {
+		return distance;
+	}
+
+	public void setDistance(int distance) {
+		this.distance = distance;
 	}
 
 	public int getDiameter() {
@@ -38,6 +44,14 @@ public class Vertex {
 		this.diameter = diameter;
 	}
 
+	public Vertex getPrevious() {
+		return previous;
+	}
+
+	public void setPrevious(Vertex previous) {
+		this.previous = previous;
+	}
+
 	public float getCentrality() {
 		return centrality;
 	}
@@ -46,26 +60,24 @@ public class Vertex {
 		this.centrality = centrality;
 	}
 
-	public Set<Vertex> getAdjacentNodes() {
-		return adjacentNodes;
+	public List<Vertex> getAdjacencyList() {
+		return adjacencyList;
 	}
 
-	public void setAdjacentNodes(Set<Vertex> adjacentNodes) {
-		this.adjacentNodes = adjacentNodes;
+	public void setAdjacencyList(List<Vertex> adjacencyList) {
+		this.adjacencyList = adjacencyList;
 	}
 
 	@Override
 	public String toString() {
-		return "Vertex [id = " + id + ", diameter = " + diameter + ", centrality = "
-				+ centrality + "]\n";
+		return "" + name;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-
+		result = prime * result + name;
 		return result;
 	}
 
@@ -84,11 +96,7 @@ public class Vertex {
 		}
 
 		Vertex other = (Vertex) obj;
-		if (id == null) {
-			if (other.id != null) {
-				return false;
-			}
-		} else if (!id.equals(other.id)) {
+		if (name != other.name) {
 			return false;
 		}
 

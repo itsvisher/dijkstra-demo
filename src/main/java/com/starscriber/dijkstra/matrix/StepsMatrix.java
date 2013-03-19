@@ -1,55 +1,92 @@
 package com.starscriber.dijkstra.matrix;
 
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.text.DecimalFormat;
 import java.util.List;
-import java.util.Map;
 
+import com.starscriber.dijkstra.Dijkstra;
 import com.starscriber.dijkstra.Edge;
+import com.starscriber.dijkstra.Graph;
 import com.starscriber.dijkstra.Vertex;
 
-/**
- * This class represents the Steps matrix for the vertices. Steps matrix is
- * nothing but the shortest path matrix (Dijkstra Algorithm) between two or more
- * vertices.
- *
- * @author Vishal | Paradigm Creatives
- */
-public class StepsMatrix extends Matrix {
+public class StepsMatrix {
 	protected int[][] matrix;
 	private List<Edge> edges;
 	private List<Vertex> vertices;
 
-	@Override
+	public StepsMatrix(Graph graph) {
+		vertices = graph.getVertices();
+		edges = graph.getEdges();
+		matrix = new int[vertices.size()][vertices.size()];
+	}
+
+	/**
+	 * Creates connection matrix of the vertices. If a vertex is connected to
+	 * another matrix the connection is shown as 1, else 0 in the matrix.
+	 */
 	public void createMatrix() {
-	}// end of createMatrix() 
-
-	/**
-	 * Gets shortest distance between two vertices.
-	 *
-	 * @param source source or starting <code>Vertex</code>.
-	 * @param destination destination or ending <code>Vertex</code>.
-	 */
-	protected void getDistance(Vertex source, Vertex destination) {
-	}// end of getDistance()
-
-	/**
-	 * List of different paths in order.
-	 *
-	 * @param source source of starting <code>Vertex</code>.
-	 * @param destination destination or ending <code>Vertex</code>.
-	 *
-	 * @return <code>List</code> of paths containing <code>Vertex</code>.
-	 */
-	protected List<Vertex> getPath(Vertex source, Vertex destination) {
-		List<Vertex> path = new LinkedList<Vertex>();
-		Vertex vertex = null;
-
-		for (int i = 0; i < vertices.size(); i++) {
-			vertex = vertices.get(i);
+		int length = vertices.size();
+		Graph graph = new Graph(vertices, edges);
+		Vertex v = null;
+		Dijkstra d = null;
+		for (int i = 0; i < length; i++) {
+			v = vertices.get(i);
+			for (int j = 0; j < length; j++) {
+				d = new Dijkstra(graph);
+				if (i == j) {
+					matrix[i][j] = 0;
+				} else {
+					d.execute(v);
+					List<Vertex> path = d.getShortestPath(vertices.get(j));
+					matrix[i][j] = path.size() - 1;
+				}
+			}
 		}
+	}// end of createMatrix()
 
-		return path;
-	}// end of getPaths
+	public void prepareDiameterAndCentrality() {
+		int length = vertices.size();
+		Vertex v = null;
+		DecimalFormat df = new DecimalFormat("###.###");
+		for (int i = 0; i < length; i++) {
+			int sum = 0;
+			int j = 0;
+			for (j = 0; j < length; j++) {
+				sum = sum + matrix[i][j];
+			}
+			float centrality = Float.parseFloat(df.format((float) 1/sum));
+			v = vertices.get(i);
+			v.setDiameter(sum);
+			v.setCentrality(Float.parseFloat(df.format(centrality)));
+		}
+	}
 
+	/**
+	 * Prints the connection matrix. Call only when created else a matrix of all
+	 * ZEROs will be shown.
+	 */
+	public void showMatrix() {
+		int length = vertices.size();
+		Vertex v = null;
+		for (int i = 0; i < length; i++) {
+			for (int j = 0; j < length; j++) {
+				if (matrix[i][j] > 9) {
+					System.out.print(matrix[i][j] + "  ");
+				} else {
+					System.out.print(matrix[i][j] + "   ");
+				}
+			}
+			v = vertices.get(i);
+			System.out.print(v.getDiameter() + "  ");
+			System.out.print(v.getCentrality());
+			System.out.println();
+		}
+	}// end of showMatrix()
+
+	public int[][] getMatrix() {
+		return matrix;
+	}
+
+	public void setMatrix(int[][] matrix) {
+		this.matrix = matrix;
+	}
 }//end of class

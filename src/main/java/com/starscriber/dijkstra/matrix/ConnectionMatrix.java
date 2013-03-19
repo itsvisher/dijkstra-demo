@@ -1,5 +1,6 @@
 package com.starscriber.dijkstra.matrix;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import com.starscriber.dijkstra.Edge;
@@ -12,7 +13,7 @@ import com.starscriber.dijkstra.Vertex;
  *
  * @author Vishal | Paradigm Creatives
  */
-public class ConnectionMatrix extends Matrix {
+public class ConnectionMatrix {
 	protected int[][] matrix;
 	private List<Edge> edges;
 	private List<Vertex> vertices;
@@ -28,15 +29,19 @@ public class ConnectionMatrix extends Matrix {
 	 * another matrix the connection is shown as 1, else 0 in the matrix.
 	 */
 	public void createMatrix() {
-		Vertex vertex = null;
-		Edge edge = null;
-
-		for (int i = 0; i < 18; i++) {
-			vertex = vertices.get(i);
-			for (int j = 0; j < 18; j++) {
-				edge = new Edge(1, vertex, vertices.get(j));
-				if (edges.contains(edge)) {
+		int length = vertices.size();
+		Vertex v = null;
+		Edge e = null;
+		List<Vertex> adjacencyList = null;
+		for (int i = 0; i < length; i++) {
+			v = vertices.get(i);
+			adjacencyList = new LinkedList<Vertex>();
+			for (int j = 0; j < length; j++) {
+				e = new Edge(1, v, vertices.get(j));
+				if (edges.contains(e)) {
 					matrix[i][j] = 1;
+					adjacencyList.add(vertices.get(j));
+					v.setAdjacencyList(adjacencyList);
 				}
 			}
 		}
@@ -47,8 +52,8 @@ public class ConnectionMatrix extends Matrix {
 	 * ZEROs will be shown.
 	 */
 	public void showMatrix() {
-		for (int i = 0; i < 18; i++) {
-			for (int j = 0; j < 18; j++) {
+		for (int i = 0; i < vertices.size(); i++) {
+			for (int j = 0; j < vertices.size(); j++) {
 				System.out.print(matrix[i][j] + "  ");
 			}
 			System.out.println();
