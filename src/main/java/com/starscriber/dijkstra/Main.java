@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
+import com.starscriber.dijkstra.communities.Community;
 import com.starscriber.dijkstra.matrix.ConnectionMatrix;
 import com.starscriber.dijkstra.matrix.StepsMatrix;
 import com.starscriber.dijkstra.util.FileOPs;
@@ -67,6 +68,9 @@ public class Main {
 		stepsMatrix.prepareDiameterAndCentrality();
 		System.out.println("\nSteps Matrix: ");
 		stepsMatrix.showMatrix();
+
+		Community community = new Community(vertices);
+		System.out.println(community.getNearVertices(stepsMatrix.getMatrix()));
 	}//end of main()
 
 }//end of class
