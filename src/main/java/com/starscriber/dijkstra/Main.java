@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.starscriber.dijkstra.matrix.ConnectionMatrix;
+import com.starscriber.dijkstra.matrix.StepsMatrix;
 import com.starscriber.dijkstra.util.FileOPs;
 
 /**
@@ -47,13 +48,25 @@ public class Main {
 			return;
 		}
 
-		System.out.println("Vertices: " + vertices);
-		System.out.println("Edges: " + edges);
+		System.out.println("Vertices: " + vertices + "\n");
+		System.out.println("Edges: " + edges + "\n");
 
+		// Connection Matrix
 		ConnectionMatrix matrix = new ConnectionMatrix(new Graph(vertices, edges));
 		matrix.createMatrix();
-		System.out.println("Connection Matrix: ");
+		System.out.println("\nAdjacency List for all vertices: ");
+		for (Vertex v: vertices) {
+			System.out.println(v + ": " + v.getAdjacencyList());
+		}
+		System.out.println("\nConnection Matrix: ");
 		matrix.showMatrix();
+
+		// Steps Matrix
+		StepsMatrix stepsMatrix = new StepsMatrix(new Graph(vertices, edges));
+		stepsMatrix.createMatrix();
+		stepsMatrix.prepareDiameterAndCentrality();
+		System.out.println("\nSteps Matrix: ");
+		stepsMatrix.showMatrix();
 	}//end of main()
 
 }//end of class

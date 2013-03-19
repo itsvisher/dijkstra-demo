@@ -27,13 +27,13 @@ public class FileOPs {
 
 		try {
 			br = new BufferedReader(new InputStreamReader(new FileInputStream(verticesPath)));
-			String id = null;
-			while ((id = br.readLine()) != null) {
-				if (id.contains("-")) {
+			String name = null;
+			while ((name = br.readLine()) != null) {
+				if (name.contains("-")) {
 					System.err.println("Invalid vertices file...");
 					return null;
 				}
-				vertex = new Vertex(id);
+				vertex = new Vertex(Integer.parseInt(name));
 				vertices.add(vertex);
 			}
 		} catch (FileNotFoundException fnfe) {
@@ -77,9 +77,9 @@ public class FileOPs {
 					return null;
 				}
 
-				source = new Vertex(edgeVertices[0]);
-				destination = new Vertex(edgeVertices[1]);
-				edge = new Edge(1, source, destination);
+				source = new Vertex(Integer.parseInt(edgeVertices[0]));
+				destination = new Vertex(Integer.parseInt(edgeVertices[1]));
+				edge = new Edge(source, destination);
 				edges.add(edge);
 			}
 		} catch (FileNotFoundException fnfe) {
