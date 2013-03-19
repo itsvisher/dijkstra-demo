@@ -1,41 +1,62 @@
 package com.starscriber.dijkstra;
 
-/**
- * Edge of a Graph.
- *
- * @author Vishal | Paradigm Creatives
- */
 public class Edge {
-	private final int weight;
-	private final Vertex source;
-	private final Vertex destination;
+	private int weight;
+	private Vertex source;
+	private Vertex target;
 
-	public Edge(int weight, Vertex source, Vertex destination) {
+	public Edge() {
 		super();
+		weight = 1;
+	}
+
+	public Edge(Vertex source, Vertex target) {
+		weight = 1;
+		this.source = source;
+		this.target = target;
+	}
+
+	public Edge(int weight, Vertex source, Vertex target) {
 		this.weight = weight;
 		this.source = source;
-		this.destination = destination;
+		this.target = target;
 	}
 
 	public int getWeight() {
 		return weight;
 	}
 
+	public void setWeight(int weight) {
+		this.weight = weight;
+	}
+
 	public Vertex getSource() {
 		return source;
 	}
 
-	public Vertex getDestination() {
-		return destination;
+	public void setSource(Vertex source) {
+		this.source = source;
+	}
+
+	public Vertex getTarget() {
+		return target;
+	}
+
+	public void setTarget(Vertex target) {
+		this.target = target;
+	}
+
+	@Override
+	public String toString() {
+		return "(" + source + ", " + target + ")";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((destination == null) ? 0 : destination.hashCode());
 		result = prime * result + ((source == null) ? 0 : source.hashCode());
-		result = prime * result + weight;
+		result = prime * result + ((target == null) ? 0 : target.hashCode());
 		return result;
 	}
 
@@ -54,14 +75,6 @@ public class Edge {
 		}
 
 		Edge other = (Edge) obj;
-		if (destination == null) {
-			if (other.destination != null) {
-				return false;
-			}
-		} else if (!destination.equals(other.destination)) {
-			return false;
-		}
-
 		if (source == null) {
 			if (other.source != null) {
 				return false;
@@ -70,16 +83,15 @@ public class Edge {
 			return false;
 		}
 
-		if (weight != other.weight) {
+		if (target == null) {
+			if (other.target != null) {
+				return false;
+			}
+		} else if (!target.equals(other.target)) {
 			return false;
 		}
 
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "Edge [weight = " + weight + ", source = " + source + ", destination = " + destination + "]\n";
-	}
-
-}// end of class
+}//end of class
