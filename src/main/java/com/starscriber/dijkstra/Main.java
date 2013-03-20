@@ -72,6 +72,9 @@ public class Main {
 
 		Community community = new Community(vertices, edges);
 		System.out.println("\nCommunities: " + community.getCommunities(stepsMatrix.getMatrix()));
+
+		System.out.println("Connections recovered: " + community.getLinks());
+		System.out.println("Percentage recovered: " + community.percentageRecovered());
 	}//end of main()
 
 }//end of class

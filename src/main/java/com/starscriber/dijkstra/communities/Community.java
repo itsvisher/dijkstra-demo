@@ -1,5 +1,6 @@
 package com.starscriber.dijkstra.communities;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,10 +12,12 @@ public class Community {
 	private List<Vertex> completeVertices;
 	private List<List<Vertex>> communites;
 	private List<Edge> edges;
+	private int totalConnections;
 
 	public Community(List<Vertex> vertices, List<Edge> edges) {
 		this.vertices = vertices;
 		this.edges = edges;
+		totalConnections = edges.size() / 2;
 		makeVerticesCopy();
 	}
 
@@ -35,7 +38,37 @@ public class Community {
 		}
 
 		return communites;
-	}
+	}// end of getCommunities()
+
+	/**
+	 * Gets the no. of new connections formed from communities.
+	 *
+	 * @return no. of new connections.
+	 */
+	public int getLinks() {
+		int sum = 0;
+		for (List<Vertex> community: communites) {
+			sum = sum + community.size();
+		}
+
+		return sum;
+	}// end of getLinks()
+
+	/**
+	 * Percentage of connections recovered.
+	 * <p>
+	 * <code>percentage recovered = (new connections / total connections) x 100</code>
+	 * </p>
+	 *
+	 * @return Percentage of connections recovered.
+	 */
+	public float percentageRecovered() {
+		int links = getLinks();
+		DecimalFormat df = new DecimalFormat("###.##");
+		float recovered = Float.parseFloat(df.format(((float) links/totalConnections) * 100));
+
+		return recovered;
+	}//end of percentageRecovered()
 
 	/**
 	 * Gets the <code>Vertex</code> with highest centrality. In case there are
