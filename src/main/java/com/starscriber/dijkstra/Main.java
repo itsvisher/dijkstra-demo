@@ -71,9 +71,7 @@ public class Main {
 		stepsMatrix.showMatrix();
 
 		Community community = new Community(vertices, edges);
-//		System.out.println(community.getRefinedCommunity(stepsMatrix.getMatrix()));
-
-		System.out.println(community.getCommunities(stepsMatrix.getMatrix()));
+		System.out.println("\nCommunities: " + community.getCommunities(stepsMatrix.getMatrix()));
 	}//end of main()
 
 }//end of class

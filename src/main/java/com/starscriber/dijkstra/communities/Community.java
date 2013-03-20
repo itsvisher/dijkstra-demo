@@ -18,10 +18,20 @@ public class Community {
 		makeVerticesCopy();
 	}
 
+	/**
+	 * Gets all the communities formed from a set of <code>Vertex</code>s.
+	 *
+	 * @param stepsMatrix steps matrix containing steps for each <code>Vertex</code>.
+	 *
+	 * @return <code>List&lt;List&lt;Vertex&gt;&gt;</code> conatining communities.
+	 */
 	public List<List<Vertex>> getCommunities(int[][] stepsMatrix) {
 		communites = new ArrayList<List<Vertex>>();
 		while (vertices.size() != 0) {
-			communites.add(getRefinedCommunity(stepsMatrix));
+			List<Vertex> community = getRefinedCommunity(stepsMatrix);
+			if (community.size() > 0) {
+				communites.add(community);
+			}
 		}
 
 		return communites;
@@ -70,7 +80,6 @@ public class Community {
 	private List<Vertex> getRawCommunity(int[][] stepsMatrix) {
 		List<Vertex> rawCommunity = new ArrayList<Vertex>();
 		Vertex maxCentralityVertex = getMaxCentralityVertex();
-//		int indexOfMax = vertices.indexOf(maxCentralityVertex);
 		int indexOfMax = completeVertices.indexOf(maxCentralityVertex);
 		int[] stepsOfMax = stepsMatrix[indexOfMax];
 		int length = stepsOfMax.length;
@@ -117,7 +126,7 @@ public class Community {
 	 * @return <code>List&lt;Vertex&gt;></code> with steps less than 10 forming
 	 *         a community.
 	 */
-	public List<Vertex> getRefinedCommunity(int[][] stepsMatrix) {
+	private List<Vertex> getRefinedCommunity(int[][] stepsMatrix) {
 		List<Vertex> refinedCommunity = new ArrayList<Vertex>();
 		List<Vertex> rawCommunity = getRawCommunity(stepsMatrix);
 		List<Vertex> leftBehind = new ArrayList<Vertex>();
@@ -140,7 +149,6 @@ public class Community {
 		}
 
 		if (leftBehind.size() > 0) {
-//			removeConnections(leftBehind, refinedCommunity);
 			removeUsedVertices(removeConnections(leftBehind, refinedCommunity));
 		}
 
@@ -160,9 +168,10 @@ public class Community {
 	}// end of removeUsedVertices()
 
 	/**
-	 * 
-	 * @param leftBehind
-	 * @param refinedCommunity
+	 * Removes edges (connections) for a vertex if its not part of any community.
+	 *
+	 * @param leftBehind <code>Vertex</code> which are not added in the refined community.
+	 * @param refinedCommunity final community based on algo.
 	 */
 	private List<Vertex> removeConnections(List<Vertex> leftBehind, List<Vertex> refinedCommunity) {
 		List<Edge> removableEdges =  new ArrayList<Edge>();
@@ -244,5 +253,5 @@ public class Community {
 		for (Vertex v: vertices) {
 			completeVertices.add(v);
 		}
-	}
+	}// end of makeVerticesCopy()
 }//end of class

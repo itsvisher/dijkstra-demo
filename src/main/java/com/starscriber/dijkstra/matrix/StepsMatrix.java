@@ -36,7 +36,7 @@ public class StepsMatrix {
 				if (i == j) {
 					matrix[i][j] = 0;
 				} else {
-					d.execute(v);
+					d.prepareData(v);
 					List<Vertex> path = d.getShortestPath(vertices.get(j));
 					matrix[i][j] = path.size() - 1;
 				}
