@@ -1,6 +1,7 @@
 package com.starscriber.dijkstra.matrix;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.starscriber.dijkstra.Dijkstra;
@@ -81,6 +82,23 @@ public class StepsMatrix {
 			System.out.println();
 		}
 	}// end of showMatrix()
+
+	public List<Vertex> addSteps() {
+		int length = vertices.size();
+		Vertex v = null;
+		List<Integer> steps = null;
+
+		for (int i = 0; i < length; i++) {
+			v = vertices.get(i);
+			steps = new ArrayList<Integer>();
+			for (int j = 0; j < length; j++) {
+				steps.add(matrix[i][j]);
+			}
+			v.setSteps(steps);
+		}
+
+		return vertices;
+	}
 
 	public int[][] getMatrix() {
 		return matrix;

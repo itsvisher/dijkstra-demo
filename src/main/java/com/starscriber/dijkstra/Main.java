@@ -66,11 +66,12 @@ public class Main {
 		StepsMatrix stepsMatrix = new StepsMatrix(new Graph(vertices, edges));
 		stepsMatrix.createMatrix();
 		stepsMatrix.prepareDiameterAndCentrality();
+		vertices = stepsMatrix.addSteps();
 		System.out.println("\nSteps Matrix: ");
 		stepsMatrix.showMatrix();
 
 		Community community = new Community(vertices);
-		System.out.println(community.getNearVertices(stepsMatrix.getMatrix()));
+		System.out.println(community.getRefinedCommunity(stepsMatrix.getMatrix()));
 	}//end of main()
 
 }//end of class
