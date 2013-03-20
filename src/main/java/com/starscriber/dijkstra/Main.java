@@ -70,8 +70,10 @@ public class Main {
 		System.out.println("\nSteps Matrix: ");
 		stepsMatrix.showMatrix();
 
-		Community community = new Community(vertices);
-		System.out.println(community.getRefinedCommunity(stepsMatrix.getMatrix()));
+		Community community = new Community(vertices, edges);
+//		System.out.println(community.getRefinedCommunity(stepsMatrix.getMatrix()));
+
+		System.out.println(community.getCommunities(stepsMatrix.getMatrix()));
 	}//end of main()
 
 }//end of class

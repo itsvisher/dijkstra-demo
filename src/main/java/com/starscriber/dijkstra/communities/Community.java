@@ -2,15 +2,29 @@ package com.starscriber.dijkstra.communities;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import com.starscriber.dijkstra.Edge;
 import com.starscriber.dijkstra.Vertex;
 
 public class Community {
 	private List<Vertex> vertices;
+	private List<Vertex> completeVertices;
+	private List<List<Vertex>> communites;
+	private List<Edge> edges;
 
-	public Community(List<Vertex> vertices) {
+	public Community(List<Vertex> vertices, List<Edge> edges) {
 		this.vertices = vertices;
+		this.edges = edges;
+		makeVerticesCopy();
+	}
+
+	public List<List<Vertex>> getCommunities(int[][] stepsMatrix) {
+		communites = new ArrayList<List<Vertex>>();
+		while (vertices.size() != 0) {
+			communites.add(getRefinedCommunity(stepsMatrix));
+		}
+
+		return communites;
 	}
 
 	/**
@@ -56,7 +70,8 @@ public class Community {
 	private List<Vertex> getRawCommunity(int[][] stepsMatrix) {
 		List<Vertex> rawCommunity = new ArrayList<Vertex>();
 		Vertex maxCentralityVertex = getMaxCentralityVertex();
-		int indexOfMax = vertices.indexOf(maxCentralityVertex);
+//		int indexOfMax = vertices.indexOf(maxCentralityVertex);
+		int indexOfMax = completeVertices.indexOf(maxCentralityVertex);
 		int[] stepsOfMax = stepsMatrix[indexOfMax];
 		int length = stepsOfMax.length;
 		Vertex lastVertex = null;
@@ -68,15 +83,17 @@ public class Community {
 					// Check if size is already 5 and the new vertex of same steps has greater centrality
 					// then remove last and add the new vertex
 					if (rawCommunity.size() == 5) {
-						if (vertices.get(j).getCentrality() > lastVertex.getCentrality()) {
+						if (completeVertices.get(j).getCentrality() > lastVertex.getCentrality()) {
 							rawCommunity.remove(lastVertex);
-							rawCommunity.add(vertices.get(j));
+							rawCommunity.add(completeVertices.get(j));
 							break;
 						}
 					}
 
-					lastVertex = vertices.get(j);
-					rawCommunity.add(lastVertex);
+					lastVertex = completeVertices.get(j);
+					if (!lastVertex.isUsed()) {
+						rawCommunity.add(lastVertex);
+					}
 				}
 			}
 
@@ -103,16 +120,29 @@ public class Community {
 	public List<Vertex> getRefinedCommunity(int[][] stepsMatrix) {
 		List<Vertex> refinedCommunity = new ArrayList<Vertex>();
 		List<Vertex> rawCommunity = getRawCommunity(stepsMatrix);
+		List<Vertex> leftBehind = new ArrayList<Vertex>();
 		int diameter = 0;
 
 		for (Vertex v: rawCommunity) {
 			diameter = v.getDiameter() - getNewDiameter(v, rawCommunity);
 			if (diameter <= 10) {
 				refinedCommunity.add(v);
+				v.setUsed(true);
+			} else {
+				leftBehind.add(v);
 			}
 		}
 
-		removeUsedVertices(refinedCommunity);
+		if (refinedCommunity.size() > 0) {
+			removeUsedVertices(refinedCommunity);
+		} else {
+			vertices.clear();
+		}
+
+		if (leftBehind.size() > 0) {
+//			removeConnections(leftBehind, refinedCommunity);
+			removeUsedVertices(removeConnections(leftBehind, refinedCommunity));
+		}
 
 		return refinedCommunity;
 	}// end of getRefinedCommunity()
@@ -130,6 +160,61 @@ public class Community {
 	}// end of removeUsedVertices()
 
 	/**
+	 * 
+	 * @param leftBehind
+	 * @param refinedCommunity
+	 */
+	private List<Vertex> removeConnections(List<Vertex> leftBehind, List<Vertex> refinedCommunity) {
+		List<Edge> removableEdges =  new ArrayList<Edge>();
+		List<Vertex> removableLeftBehindVertices = new ArrayList<Vertex>();
+
+//		for (Vertex v: leftBehind) {
+//			for (Vertex u: refinedCommunity) {
+//				removableEdges.add(new Edge(v, u));
+//				removableEdges.add(new Edge(u, v));
+//			}
+//		}
+
+		for (Vertex v: leftBehind) {
+			for (Edge e: edges) {
+				if (e.getSource().equals(v)) {
+					for (Vertex u: refinedCommunity) {
+						if (e.getTarget().equals(u)) {
+							removableEdges.add(e);
+						}
+					}
+				}
+				if (e.getTarget().equals(v)) {
+					for (Vertex u: refinedCommunity) {
+						if (e.getSource().equals(u)) {
+							removableEdges.add(e);
+						}
+					}
+				}
+			}
+		}
+
+		for (Edge e: removableEdges) {
+			edges.remove(e);
+		}
+
+		for (Vertex v: leftBehind) {
+			boolean exists = false;
+			for (Edge e: edges) {
+				if (e.getSource().equals(v)) {
+					exists = true;
+				}
+			}
+
+			if (!exists) {
+				removableLeftBehindVertices.add(v);
+			}
+		}
+		
+		return removableLeftBehindVertices;
+	}//end of removeEdges()
+
+	/**
 	 * Gets diameter for the remaining no. of <code>Vertex</code>s for a <code>Vertex</code>.
 	 *
 	 * @param source starting <code>Vertex</code>.
@@ -141,8 +226,8 @@ public class Community {
 		int diameter = 0;
 		List<Integer> steps = source.getSteps();
 		Vertex u = null;
-		for (int i = 0; i < vertices.size(); i++) {
-			u = vertices.get(i);
+		for (int i = 0; i < completeVertices.size(); i++) {
+			u = completeVertices.get(i);
 			if (!rawCommunity.contains(u)) {
 				diameter = diameter + steps.get(i);
 			}
@@ -150,4 +235,14 @@ public class Community {
 
 		return diameter;
 	}// end of getNewDiameter()
+
+	/**
+	 * Makes a copy of <code>List&lt;Vertex&gt;</code>s.
+	 */
+	private void makeVerticesCopy() {
+		completeVertices = new ArrayList<Vertex>();
+		for (Vertex v: vertices) {
+			completeVertices.add(v);
+		}
+	}
 }//end of class

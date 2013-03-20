@@ -10,6 +10,7 @@ public class Vertex {
 	private float centrality;
 	private List<Vertex> adjacencyList;
 	private List<Integer> steps;
+	private boolean used;
 
 	public Vertex() {
 		super();
@@ -75,6 +76,14 @@ public class Vertex {
 
 	public void setSteps(List<Integer> steps) {
 		this.steps = steps;
+	}
+
+	public boolean isUsed() {
+		return used;
+	}
+
+	public void setUsed(boolean used) {
+		this.used = used;
 	}
 
 	@Override
