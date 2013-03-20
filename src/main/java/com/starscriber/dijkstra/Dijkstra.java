@@ -20,7 +20,12 @@ public class Dijkstra {
 		this.edges = new ArrayList<Edge>(graph.getEdges());
 	}
 
-	public void execute(Vertex source) {
+	/**
+	 * Prepares set of data such as visited and unvisited sets, distances etc.
+	 *
+	 * @param source source <code>Vertex</code>
+	 */
+	public void prepareData(Vertex source) {
 		visitedSet = new HashSet<Vertex>();
 		unvisitedSet = new HashSet<Vertex>();
 		distance = new HashMap<Vertex, Integer>();
