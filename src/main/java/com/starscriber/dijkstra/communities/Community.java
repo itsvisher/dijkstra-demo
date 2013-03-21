@@ -81,11 +81,9 @@ public class Community {
 		List<Vertex> maxCentralityVertices = new ArrayList<Vertex>();
 		Vertex vertex = null;
 		float centrality = (vertices != null)? vertices.get(0).getCentrality(): 0;
-		vertex = vertices.get(0);
 		for (Vertex v: vertices) {
 			if (v.getCentrality() > centrality) {
 				centrality = v.getCentrality();
-//				maxCentralityVertices.add(v);
 			}
 		}
 
@@ -97,8 +95,8 @@ public class Community {
 
 		int diameter = (maxCentralityVertices != null && maxCentralityVertices
 				.size() > 0) ? maxCentralityVertices.get(0).getDiameter() : 0;
-				vertex = (maxCentralityVertices != null && maxCentralityVertices
-						.size() > 0) ? maxCentralityVertices.get(0): null;
+		vertex = (maxCentralityVertices != null && maxCentralityVertices.size() > 0) ? maxCentralityVertices
+				.get(0) : null;
 		if (maxCentralityVertices.size() > 1) {
 			for (Vertex u: maxCentralityVertices) {
 				if (u.getDiameter() < diameter) {
@@ -138,8 +136,8 @@ public class Community {
 						if (completeVertices.get(j).getCentrality() > lastVertex.getCentrality()) {
 							rawCommunity.remove(lastVertex);
 							rawCommunity.add(completeVertices.get(j));
-							break;
 						}
+						break;
 					}
 
 					lastVertex = completeVertices.get(j);
